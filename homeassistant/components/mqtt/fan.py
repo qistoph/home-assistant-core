@@ -336,7 +336,9 @@ class MqttFan(MqttEntity, FanEntity):
         @log_messages(self.hass, self.entity_id)
         def state_received(msg):
             """Handle new received MQTT message."""
-            payload = self._templates[CONF_STATE](msg.payload)
+            payload = self._templates[CONF_STATE](
+                msg.payload, variables={"entity_id": self.entity_id}
+            )
             if payload == self._payload["STATE_ON"]:
                 self._state = True
             elif payload == self._payload["STATE_OFF"]:
@@ -417,7 +419,9 @@ class MqttFan(MqttEntity, FanEntity):
         @log_messages(self.hass, self.entity_id)
         def speed_received(msg):
             """Handle new received MQTT message for the speed."""
-            speed_payload = self._templates[ATTR_SPEED](msg.payload)
+            speed_payload = self._templates[ATTR_SPEED](
+                msg.payload, variables={"entity_id": self.entity_id}
+            )
             if speed_payload == self._payload["SPEED_LOW"]:
                 speed = SPEED_LOW
             elif speed_payload == self._payload["SPEED_MEDIUM"]:
@@ -461,7 +465,9 @@ class MqttFan(MqttEntity, FanEntity):
         @log_messages(self.hass, self.entity_id)
         def oscillation_received(msg):
             """Handle new received MQTT message for the oscillation."""
-            payload = self._templates[OSCILLATION](msg.payload)
+            payload = self._templates[OSCILLATION](
+                msg.payload, variables={"entity_id": self.entity_id}
+            )
             if payload == self._payload["OSCILLATE_ON_PAYLOAD"]:
                 self._oscillation = True
             elif payload == self._payload["OSCILLATE_OFF_PAYLOAD"]:

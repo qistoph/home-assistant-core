@@ -264,7 +264,7 @@ class MqttCover(MqttEntity, CoverEntity):
             tilt_status_template = self._config.get(CONF_TILT_STATUS_TEMPLATE)
             if tilt_status_template is not None:
                 payload = tilt_status_template.async_render_with_possible_json_value(
-                    payload
+                    payload, variables={"entity_id": self.entity_id}
                 )
 
             if not payload.isnumeric():
@@ -295,7 +295,9 @@ class MqttCover(MqttEntity, CoverEntity):
             payload = msg.payload
             value_template = self._config.get(CONF_VALUE_TEMPLATE)
             if value_template is not None:
-                payload = value_template.async_render_with_possible_json_value(payload)
+                payload = value_template.async_render_with_possible_json_value(
+                    payload, variables={"entity_id": self.entity_id}
+                )
 
             if payload == self._config[CONF_STATE_STOPPED]:
                 if self._config.get(CONF_GET_POSITION_TOPIC) is not None:
@@ -339,7 +341,9 @@ class MqttCover(MqttEntity, CoverEntity):
                 template = self._config.get(CONF_VALUE_TEMPLATE)
 
             if template is not None:
-                payload = template.async_render_with_possible_json_value(payload)
+                payload = template.async_render_with_possible_json_value(
+                    payload, variables={"entity_id": self.entity_id}
+                )
 
             if payload.isnumeric():
                 percentage_payload = self.find_percentage_in_range(
